@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="src/bootstrap.min.css">
+	<title>Resourse Counter</title>
+	<!--link rel="stylesheet" href="src/chartist.min.css"-->
+	<link rel="stylesheet" type="text/css" href="src/mtr-datepicker.min.css">
+	<link rel="stylesheet" type="text/css" href="src/mtr-datepicker.default-theme.min.css">
+</head>
+
+<body>
+	<div class="container">
+		<header class="d-flex flex-wrap justify-content-center py-1 mb-2 border-bottom">
+			<a href="/" class="d-flex align-items-center me-sm-auto text-dark text-decoration-none">
+				<span class="fs-4">Counter</span>
+			</a>
+
+			<ul class="nav nav-pills">
+				<li class="nav-item"><a href="index.htm" class="nav-link">Main</a></li>
+				<li class="nav-item"><a href="graph.htm" class="nav-link active" aria-current="page">Graph</a></li>
+				<li class="nav-item"><a href="config.htm" class="nav-link">Settings</a></li>
+			</ul>
+		</header>
+	</div>
+
+	<div class="mx-auto col-10">
+		<nav aria-label="Page navigation">
+			<ul class="pagination justify-content-end">
+				<li class="page-item">
+					<a class="page-link" href="#" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+				<li class="page-item"><a class="page-link" href="#">Cur Date</a></li>
+				<li class="page-item">
+					<a class="page-link" href="#" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+		<div id="first-mtr-datepicker"></div>
+		<div>
+			<canvas id="myChart"></canvas>
+		</div>
+	</div>
+
+
+
+	<!-- https://www.chartjs.org/docs/latest/charts/bar.html -->
+	<script src="src/chart.min.js"></script>
+	<!-- http://gionkunz.github.io/chartist-js/examples.html -->
+	<!--script src="src/chartist.min.js"></script-->
+	<script type="text/javascript" src="src/mtr-datepicker.min.js"></script>
+
+	<script>
+		var config = {
+			target: 'first-mtr-datepicker',
+			disableAmPm: true,
+			//timepicker: false
+		};
+		var myDatepicker = new MtrDatepicker(config);
+
+		function FetchHourly() {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					var str = this.responseText;
+					var Arr = str.split("|");
+					hChart(Arr);
+				}
+			};
+			xhttp.open("GET", "/get?h", true);
+			xhttp.send();
+		}
+
+		function hChart(hArr) {
+			let hours = [];
+			for (let i = 0; i < 24; i++) {
+				hours[i] = i;
+			}
+
+			var i = hArr.length;
+			var Sum = 0;
+			while (i--) {
+				var fl = parseFloat(hArr[i]);
+				if (isNaN(fl))
+					continue;
+				Sum += fl;
+			}
+			console.log(Sum);
+			var label = "In sum for day " + Sum;
+
+			const data = {
+				labels: hours,
+				datasets: [{
+					label: label,
+					data: hArr,
+					borderWidth: 1
+				}]
+			};
+
+			const config = {
+				type: 'bar',
+				data: data,
+				options: {
+					scales: {
+						y: {
+							beginAtZero: true
+						}
+					}
+				},
+			};
+
+			const myChart = new Chart(
+				document.getElementById('myChart'),
+				config
+			);
+		}
+
+		function Debug() {
+			var Arr = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+			hChart(Arr);
+		}
+		//FetchHourly();
+		Debug();
+	</script>
+</body>
+
+</html>

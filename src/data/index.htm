@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="src/bootstrap.min.css">
+	<title>Resourse Counter</title>
+</head>
+
+<body>
+	<div class="container">
+		<header class="d-flex flex-wrap justify-content-center py-1 mb-2 border-bottom">
+			<a href="/" class="d-flex align-items-center me-sm-auto text-dark text-decoration-none">
+				<span class="fs-4">Counter</span>
+			</a>
+
+			<ul class="nav nav-pills">
+				<li class="nav-item"><a href="index.htm" class="nav-link active" aria-current="page">Main</a></li>
+				<li class="nav-item"><a href="graph.htm" class="nav-link">Graph</a></li>
+				<li class="nav-item"><a href="config.htm" class="nav-link">Settings</a></li>
+			</ul>
+		</header>
+	</div>
+
+	<!--https://www.w3schools.com/bootstrap/bootstrap_examples.asp-->
+	<div class="mx-auto col-10">
+		<div class="p-3 border rounded-3 bg-light">
+			Date: <span id="date">1/1/2021 0:00:00</span>
+			<br>
+			Uptime: <span id="uptime">3d 11:34</span>
+			<br>
+			Space (free/total): <span id="free">-</span>/<span id="total">-</span> Kbytes
+		</div>
+
+		<table class="table table-striped table-sm my-2 p-3 border rounded-3 bg-light">
+			<thead>
+				<tr>
+					<th scope="col">Since begining of</th>
+					<th scope="col">Consumption(<span id="measUnit">kWt</span>)</th>
+					<th scope="col">Cost(<span id="costUnit">$</span>)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">All</th>
+					<td id="consAll">--</td>
+					<td id="costAll">---</td>
+				</tr>
+				<tr>
+					<th scope="row">Month</th>
+					<td id="consMonth">222</td>
+					<td id="costMonth">2222.222</td>
+				</tr>
+				<tr>
+					<th scope="row">Day</th>
+					<td id="consDay">23.1</td>
+					<td id="costDay">122.5</td>
+				</tr>
+				<tr>
+					<th scope="row">Hour</th>
+					<td id="consHour">23.1</td>
+					<td id="costHour">122.5</td>
+				</tr>
+				<tr class="table-info">
+					<th scope="row">Instant(per hour) <a href="" title="Measured between two pulses">?</a></th>
+					<td id="consInst">2.3</td>
+					<td id="costInst">12.2</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<script>
+		FetchStatistic("full");
+		setInterval(function () { FetchStatistic("full"); }, 60 * 1000);
+		setInterval(function () { FetchStatistic("inst"); }, 1000);
+
+		function FetchStatistic(stattype) {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					const json = xhttp.response;
+					for (var key in json) {
+						var value = json[key];
+						document.getElementById(key).innerHTML = value;
+					}
+				}
+			};
+			xhttp.responseType = 'json';
+			url = "/get?stat" + stattype;
+			xhttp.open("GET", url, true);
+			xhttp.send();
+		}
+	</script>
+	<script src="src/jquery-3.6.0.slim.min.js"></script>
+	<script src="src/bootstrap.bundle.min.js"></script>
+	<script src="src/bootstrap.min.js"></script>
+</body>
+
+</html>
