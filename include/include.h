@@ -32,8 +32,7 @@ const byte pinImpGnd = D2;
 
 typedef struct {
   uint32_t crc32;
-  // Кол-во загрузок
-  int count;
+  int boot_count;
 
   int poweron_count;
   int wdt_count;
@@ -41,13 +40,13 @@ typedef struct {
   int unknown_count;
   byte last_rst_reason;
 
-} config_data;
-extern config_data cfg;
+} reset_data;
+extern reset_data cfg;
 
 typedef struct {
-  bool initialized;
-  time_t start_time;
-  double instantPower;
+  //bool initialized;
+  time_t start_time; // seconds from 1990 (Epoch32Time)
+  double instantPower; 
   byte minPulseLen;
   word pulseInUnit;
   float unitCost;

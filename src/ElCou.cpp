@@ -22,7 +22,7 @@ volatile bool pulseFound = false;
 //const char *meas_unit = "kW";
 //const char *cost_unit = "rub";
 
-config_data cfg;
+reset_data cfg;
 gcfg_t gcfg;
 
 void setup() {

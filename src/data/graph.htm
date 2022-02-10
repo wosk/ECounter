@@ -9,9 +9,6 @@
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="src/bootstrap.min.css">
 	<title>Resourse Counter</title>
-	<!--link rel="stylesheet" href="src/chartist.min.css"-->
-	<link rel="stylesheet" type="text/css" href="src/mtr-datepicker.min.css">
-	<link rel="stylesheet" type="text/css" href="src/mtr-datepicker.default-theme.min.css">
 </head>
 
 <body>
@@ -37,7 +34,7 @@
 						<span aria-hidden="true">&laquo;</span>
 					</a>
 				</li>
-				<li class="page-item"><a class="page-link" href="#">Cur Date</a></li>
+				<li class="page-item"><a class="page-link" href="#">Cur Month</a></li>
 				<li class="page-item">
 					<a class="page-link" href="#" aria-label="Next">
 						<span aria-hidden="true">&raquo;</span>
@@ -45,7 +42,6 @@
 				</li>
 			</ul>
 		</nav>
-		<div id="first-mtr-datepicker"></div>
 		<div>
 			<canvas id="myChart"></canvas>
 		</div>
@@ -57,15 +53,15 @@
 	<script src="src/chart.min.js"></script>
 	<!-- http://gionkunz.github.io/chartist-js/examples.html -->
 	<!--script src="src/chartist.min.js"></script-->
-	<script type="text/javascript" src="src/mtr-datepicker.min.js"></script>
+	<script type="module" src="src/date-fns.min.js"></script>
+	<script src="src/chartjs-adapter-date-fns.bundle.min.js"></script>
 
-	<script>
-		var config = {
-			target: 'first-mtr-datepicker',
-			disableAmPm: true,
-			//timepicker: false
-		};
-		var myDatepicker = new MtrDatepicker(config);
+	<script type="module">
+		//import { foo, bar } from  "./module.js";
+		//import {de} from './src/date-fns.min.js';
+		//import { de } from './src/date-fns.min.js';
+		//import { de } from './src/chartjs-adapter-date-fns.bundle.min.js';
+
 
 		function FetchHourly() {
 			var xhttp = new XMLHttpRequest();
@@ -106,6 +102,16 @@
 				}]
 			};
 
+			// function clickHandler(evt) {
+			// 	const points = myChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+
+			// 	if (points.length) {
+			// 		const firstPoint = points[0];
+			// 		const label = myChart.data.labels[firstPoint.index];
+			// 		const value = myChart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
+			// 	}
+			// }
+
 			const config = {
 				type: 'bar',
 				data: data,
@@ -114,19 +120,131 @@
 						y: {
 							beginAtZero: true
 						}
-					}
+					},
+					//onClick: clickHandler
 				},
 			};
 
-			const myChart = new Chart(
-				document.getElementById('myChart'),
-				config
-			);
+			// const myChart = new Chart(
+			// 	document.getElementById('myChart'),
+			// 	config
+			// );
+		}
+
+
+
+
+		function TestChart() {
+			let hours = [];
+			for (let i = 0; i < 3; i++) {
+				hours[i] = i * 2;
+			}
+
+
+			var ctx = document.getElementById('myChart');
+
+			// const data = {
+			// 	data: [12, 123, 11],
+			// 	labels: hours,
+			// };
+			// var chart = new Chart(ctx, {
+			// 	type: 'line',
+			// 	data: data,
+			// 	options: {
+			// 		scales: {
+			// 			x: {
+			// 				type: 'time',
+			// 				time: {
+			// 					unit: 'month'
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// });
+
+			debugger;
+			//const months = Utils.months({count: 7});
+			const months = ["Jan", "Feb", "March", "sdf"]
+			const data = [{ x: 'Jan', net: 100, cogs: 50, gm: 50 }, { x: 'Feb', net: 120, cogs: 55, gm: 75 }];
+			const chart = new Chart(ctx, {
+				type: 'line',
+				data: data,
+				labels: months,
+				options: {
+					scales: {
+						x: {
+							type: 'time',
+							// time: {
+							// 		// unit: 'hour',
+							// 		// displayFormats: {
+							// 		// 	month: 'dd MMM yy',
+							// 		// },
+							// }
+						}
+					}
+				}
+			});
+
+			// const data = [{ x: 'Jan', net: 100, cogs: 50, gm: 50 }, { x: 'Feb', net: 120, cogs: 55, gm: 75 }];
+			// const chart = new Chart(ctx,
+			// 	{
+			// 		type: 'line',
+			// 		data: data,
+			// 		// data: hours,
+			// 		// labels: hours,
+			// 		//data: [{x:'Sales', y:20}, {x:'Revenue', y:10}],
+			// 		// data: {
+			// 		// 	labels: ['Jan', 'Feb'],
+			// 		// 	datasets: [{
+			// 		// 		label: 'Net sales',
+			// 		// 		data: data,
+			// 		// 		parsing: {
+			// 		// 			yAxisKey: 'net'
+			// 		// 		}
+			// 		// 	}, {
+			// 		// 		label: 'Cost of goods sold',
+			// 		// 		data: data,
+			// 		// 		parsing: {
+			// 		// 			yAxisKey: 'cogs'
+			// 		// 		}
+			// 		// 	}, {
+			// 		// 		label: 'Gross margin',
+			// 		// 		data: data,
+			// 		// 		parsing: {
+			// 		// 			yAxisKey: 'gm'
+			// 		// 		}
+			// 		// 	}]
+			// 		// },
+			// 		options: {
+			// 			scales: {
+			// 				y: {
+			// 					beginAtZero: true
+			// 				},
+			// 				x: {
+			// 					// adapters: {
+			// 					// 	date: {
+			// 					// 		locale: de
+			// 					// 	}
+			// 					// },
+			// 					type: 'time',
+			// 					distribution: 'linear',
+			// 					time: {
+			// 						unit: 'month',
+			// 						displayFormats: {
+			// 							month: 'dd MMM yy',
+			// 						},
+			// 					}
+			// 				}
+			// 			}
+			// 		}
+			// 	});
 		}
 
 		function Debug() {
 			var Arr = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-			hChart(Arr);
+			//hChart(Arr);
+			//debugger;
+			TestChart();
 		}
 		//FetchHourly();
 		Debug();

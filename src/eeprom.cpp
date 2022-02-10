@@ -24,7 +24,7 @@ void readEeprom() {
   unsigned int i;
   byte *eBuf = (byte *)&cfg;
   
-  BUILD_BUG_ON(sizeof(config_data) > SPI_FLASH_SEC_SIZE);
+  BUILD_BUG_ON(sizeof(reset_data) > SPI_FLASH_SEC_SIZE);
   EEPROM.begin(sizeof(cfg));
 
   for (i = 0; i < sizeof(cfg); i++) {

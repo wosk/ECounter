@@ -8,7 +8,7 @@ void CheckRSTinfo()
   DEBUG_UART_MSG("\nResetReason: ");
   DEBUG_UART_MSG("%s\n", ESP.getResetReason().c_str());
   cfg.last_rst_reason = resetInfo->reason;
-  return;
+  return; // TODO
 
   switch (resetInfo->reason)
   {
